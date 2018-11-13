@@ -1,0 +1,30 @@
+@import '../../node_modules/normalize.css/normalize.css';
+@import './common/less/color.less';
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    background-image: url('./images/background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+ul, li, p {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: @black;
+
+    &:hover {
+        color: @black;
+        text-decoration: none;
+    }
+}
