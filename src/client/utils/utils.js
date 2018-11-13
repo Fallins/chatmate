@@ -3,7 +3,7 @@ import { receiveMessage } from '../actions'
 let socket
 
 const init = dispatch => {
-    socket = openSocket('ws://localhost:4000')
+    socket = openSocket() //'ws://localhost:4000'
     console.log(`socket has connected.`, { socket })
 
     socket.on('greet', msg => {
