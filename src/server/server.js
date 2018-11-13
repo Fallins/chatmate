@@ -7,7 +7,7 @@ if (process.env.NODE_ENV === 'production') {
     // Set static folder
     app.use(express.static('dist'))
 
-    app.get('*', (req, res) => {
+    app.get('/', (req, res) => {
         res.sendFile(path.resolve(__dirname, 'dist', 'index.html'))
     })
 }
@@ -21,7 +21,7 @@ io.on('connection', socket => {
 
     socket.on('greet', username => {
         console.log(`${username} is connected`)
-        
+
         name = username
         io.emit('greet', {
             name: SYS,

@@ -76,5 +76,5 @@ module.exports = {
         // inline: true
         historyApiFallback: true // 修正 hot reload 之後會有找不到 route 的情形
     },
-    mode: 'development'
+    // mode: 'development'
 }
