@@ -3,7 +3,7 @@ import { receiveMessage } from '../actions'
 let socket
 
 const init = dispatch => {
-    socket = openSocket() //'ws://localhost:4000'
+    socket = openSocket(`ws://${window.location.host}`) //ws://localhost:4000 //ws://${window.location.host}
     console.log(`socket has connected.`, { socket })
 
     socket.on('greet', msg => {
@@ -14,6 +14,11 @@ const init = dispatch => {
     socket.on('message', msg => {
         console.log('onMessage', msg)
         dispatch(receiveMessage('general', msg.name, msg.content))
+    })
+
+    socket.on('leaved', msg => {
+        console.log('onLeaved', msg)
+        dispatch(receiveMessage('system', msg.name, msg.content))
     })
 }
 

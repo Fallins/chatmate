@@ -21,7 +21,8 @@ io.on('connection', socket => {
 
     socket.on('greet', username => {
         console.log(`${username} is connected`)
-
+        
+        name = username
         io.emit('greet', {
             name: SYS,
             content: `${username} is connected`

@@ -16,19 +16,25 @@ const Msg = ({ name, content }) => (
         <div className="content">{content}</div>
     </li>
 )
-const Input = ({ val, onChangeHandler, onSendHandler }) => (
-    <div className="input">
-        <input
-            type="text"
-            onChange={onChangeHandler}
-            className="textfield"
-            value={val}
-        />
-        <Button onClick={onSendHandler} bsStyle="primary">
-            Send
-        </Button>
-    </div>
-)
+const Input = ({ val, onChangeHandler, onSendHandler }) => {
+    const onEnter = e => {
+        if(e.which == 13)  onSendHandler()
+    }
+    return (
+        <div className="input">
+            <input
+                type="text"
+                onChange={onChangeHandler}
+                className="textfield"
+                value={val}
+                onKeyDown={onEnter}
+            />
+            <Button onClick={onSendHandler} bsStyle="primary">
+                Send
+            </Button>
+        </div>
+    )
+}
 const Rooms = ({ active, roomChange }) => (
     <ul>
         {rooms.map(room => (
@@ -63,6 +69,7 @@ class Chatroom extends Component {
         const { room, msg } = this.state
         const { name } = this.props
         sendMsg(room, name, msg)
+        this.setState({msg: ''})
     }
 
     onChangeHandler = e => this.setState({ msg: e.target.value })
@@ -106,11 +113,16 @@ class Chatroom extends Component {
                                 </ul>
                             </div>
 
-                            <Input
-                                val={msg}
-                                onChangeHandler={this.onChangeHandler}
-                                onSendHandler={this.sendHandler}
-                            />
+                            {
+                                room == 'system' ? null : (
+                                    <Input
+                                        val={msg}
+                                        onChangeHandler={this.onChangeHandler}
+                                        onSendHandler={this.sendHandler}
+                                    />
+                                )
+                            }
+                            
                         </Col>
                     </Row>
                 </Grid>

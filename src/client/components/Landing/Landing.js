@@ -55,6 +55,7 @@ class Landing extends Component {
                             placeholder="Please enter your name"
                             value={this.state.name}
                             onChange={this.onChangeHandler}
+                            onKeyDown={e => e.which == 13 ? this.startChat() : null}
                         />
                         <Button bsStyle="success" onClick={this.startChat}>
                             Submit
