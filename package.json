@@ -4,12 +4,11 @@
   "description": "A chat APP made by react",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --mode development --hot --config webpack.config.js",
-    "build": "webpack --config webpack.config.js --mode production",
+    "dev": "webpack-dev-server --mode development --hot --config webpack.config.js --env.NODE_ENV=dev",
+    "build": "webpack --config webpack.config.js --env.NODE_ENV=production",
     "server": "nodemon src/server/server.js",
     "start": "node src/server/server.js",
-    "heroku-postbuild": 
-      "npm run build"
+    "heroku-postbuild": "npm run build"
   },
   "keywords": [
     "react",
@@ -18,6 +17,7 @@
   "author": "Ben",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^6.1.0",
     "express": "^4.16.4",
     "normalize.css": "^8.0.0",
     "react": "^16.6.1",
