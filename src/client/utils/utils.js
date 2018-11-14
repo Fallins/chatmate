@@ -1,10 +1,20 @@
 import openSocket from 'socket.io-client'
-import { receiveMessage } from '../actions'
+import { receiveMessage, actionStatus, setInfo } from '../actions'
 let socket
 
 const init = dispatch => {
-    socket = openSocket(window.wsUrl) 
+    socket = openSocket(window.wsUrl)
     console.log(`socket has connected.`, { socket })
+
+    socket.on('info', info => {
+        console.log('INFO: ', info)
+        dispatch(setInfo(info))
+    })
+
+    // socket.on('join', msg => {
+    //     console.log('onJoin', msg)
+    //     dispatch(actionStatus(msg.status, msg.action, msg.content))
+    // })
 
     socket.on('greet', msg => {
         console.log('onGreet', msg)
@@ -29,5 +39,9 @@ const greet = name => {
 const sendMsg = (room, name, msg) => {
     socket.emit('message', { room, name, msg })
 }
+
+// const join = name => {
+//     socket.emit('join', name)
+// }
 
 export { init, greet, sendMsg }

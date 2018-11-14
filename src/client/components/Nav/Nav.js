@@ -14,7 +14,7 @@ function Nav() {
                 </Link>
                 <ul className="menu">
                     <li>
-                        <Link to="/">Lobby</Link>
+                        <Link to="/loby">Lobby</Link>
                     </li>
                     <li>
                         <Link to="/chat">Chat</Link>

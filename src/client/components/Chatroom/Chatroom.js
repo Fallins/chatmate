@@ -1,5 +1,12 @@
 import React, { Component } from 'react'
-import { Grid, Row, Col, Button } from 'react-bootstrap'
+import {
+    Grid,
+    Row,
+    Col,
+    Button,
+    DropdownButton,
+    MenuItem
+} from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { rooms } from '../../common/settings/setting'
 // import { receiveMessage } from '../../actions'
@@ -18,7 +25,7 @@ const Msg = ({ name, content }) => (
 )
 const Input = ({ val, onChangeHandler, onSendHandler }) => {
     const onEnter = e => {
-        if(e.which == 13)  onSendHandler()
+        if (e.which == 13) onSendHandler()
     }
     return (
         <div className="input">
@@ -55,21 +62,16 @@ class Chatroom extends Component {
         this.state = {
             msgs: props.msgs,
             msg: '',
-            room: 'system'
+            room: 'system',
+            name: props.name
         }
     }
 
     sendHandler = () => {
-        // this.setState({
-        //     msgs: [
-        //         ...this.state.msgs,
-        //         { name: 'test', content: this.state.msg }
-        //     ]
-        // })
         const { room, msg } = this.state
         const { name } = this.props
         sendMsg(room, name, msg)
-        this.setState({msg: ''})
+        this.setState({ msg: '' })
     }
 
     onChangeHandler = e => this.setState({ msg: e.target.value })
@@ -77,16 +79,19 @@ class Chatroom extends Component {
     onRoomChangeHandler = room => this.setState({ room })
 
     static getDerivedStateFromProps(nextProps, state) {
-        if (nextProps.msgs != state.msga) {
-            return {
-                ...state,
-                msgs: nextProps.msgs
-            }
+        let hasChange = false
+        let newState = {}
+
+        if (nextProps.msgs != state.msgs) {
+            hasChange = true
+            newState.msgs = nextProps.msgs
         }
 
-        return {
-            ...state
+        if (!nextProps.name) {
+            nextProps.history.push('/')
         }
+
+        return hasChange ? { ...state, ...newState } : { ...state }
     }
 
     render() {
@@ -95,16 +100,38 @@ class Chatroom extends Component {
             <div className="chatroom">
                 <Grid>
                     <Row>
-                        <Col
-                            className="left-panel"
-                            md={4}
-                            sm={3}
-                            xsHidden={true}
-                        >
-                            <Rooms
-                                active={room}
-                                roomChange={this.onRoomChangeHandler}
-                            />
+                        <Col className="left-panel" md={4} sm={3} xs={12}>
+                            <Col xsHidden={true}>
+                                <Rooms
+                                    active={room}
+                                    roomChange={this.onRoomChangeHandler}
+                                />
+                            </Col>
+
+                            <Col
+                                smHidden={true}
+                                mdHidden={true}
+                                lgHidden={true}
+                            >
+                                <DropdownButton
+                                    title={room.toUpperCase()}
+                                    id="ROOM"
+                                    className="dropdownBtn"
+                                >
+                                    {rooms.map(r => (
+                                        <MenuItem
+                                            key={r}
+                                            onClick={this.onRoomChangeHandler.bind(
+                                                this,
+                                                r
+                                            )}
+                                            active={r == room}
+                                        >
+                                            {r.toUpperCase()}
+                                        </MenuItem>
+                                    ))}
+                                </DropdownButton>
+                            </Col>
                         </Col>
                         <Col className="right-panel" xs={12} sm={9} md={8}>
                             <div className="messages">
@@ -113,16 +140,13 @@ class Chatroom extends Component {
                                 </ul>
                             </div>
 
-                            {
-                                room == 'system' ? null : (
-                                    <Input
-                                        val={msg}
-                                        onChangeHandler={this.onChangeHandler}
-                                        onSendHandler={this.sendHandler}
-                                    />
-                                )
-                            }
-                            
+                            {room == 'system' ? null : (
+                                <Input
+                                    val={msg}
+                                    onChangeHandler={this.onChangeHandler}
+                                    onSendHandler={this.sendHandler}
+                                />
+                            )}
                         </Col>
                     </Row>
                 </Grid>
@@ -137,39 +161,3 @@ const mapS2P = state => ({
 })
 
 export default connect(mapS2P)(Chatroom)
-
-// [
-//     {
-//         name: 'Ben',
-//         content:
-//             'Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, sequi!'
-//     },
-//     {
-//         name: 'Jay',
-//         content:
-//             'Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, sequi!'
-//     },
-//     {
-//         name: 'Jane',
-//         content:
-//             'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex obcaecati velit delectus tenetur placeat laudantium.'
-//     },
-//     {
-//         name: 'Ben',
-//         content: 'Lorem, ipsum dolor.'
-//     },
-//     {
-//         name: 'Jane',
-//         content:
-//             'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veritatis ipsum quos facere debitis expedita quisquam sit inventore deleniti laborum aut!'
-//     },
-//     {
-//         name: 'Jay',
-//         content: 'Lorem ipsum dolor sit amet consectetur.'
-//     },
-//     {
-//         name: 'Jane',
-//         content:
-//             'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum, magni suscipit. Veritatis inventore tenetur reiciendis, at facere placeat sint dolorem, ut dolor earum maiores atque illum ea dignissimos, tempora hic.'
-//     }
-// ]

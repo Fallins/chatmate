@@ -17,11 +17,15 @@ class Landing extends Component {
 
     startChat = () => {
         const { name } = this.state
+        const { users } = this.props
         console.log(this.props)
-        if (name) {
+
+        if (users.find(user => user == name)) {
+            alert('User already exist. Please choose another name to chat.')
+        } else {
             this.props.addUser(name)
             greet(name)
-            this.props.history.push('/chat')
+            this.props.history.push('/loby')
         }
     }
 
@@ -30,16 +34,23 @@ class Landing extends Component {
     onChangeHandler = e => this.setState({ name: e.target.value })
 
     render() {
+        const { name } = this.state
         return (
             <div className="landing">
-                <Button
-                    onClick={this.onOpenHandler}
-                    className="btn start"
-                    bsStyle="info"
-                    bsSize="large"
-                >
-                    Start
-                </Button>
+                {name ? (
+                    <Button className="btn start" bsStyle="info" bsSize="large">
+                        {`Hello, ${name}`}
+                    </Button>
+                ) : (
+                    <Button
+                        onClick={this.onOpenHandler}
+                        className="btn start"
+                        bsStyle="info"
+                        bsSize="large"
+                    >
+                        Start
+                    </Button>
+                )}
                 <Modal
                     bsSize="small"
                     show={this.state.show}
@@ -55,7 +66,9 @@ class Landing extends Component {
                             placeholder="Please enter your name"
                             value={this.state.name}
                             onChange={this.onChangeHandler}
-                            onKeyDown={e => e.which == 13 ? this.startChat() : null}
+                            onKeyDown={e =>
+                                e.which == 13 ? this.startChat() : null
+                            }
                         />
                         <Button bsStyle="success" onClick={this.startChat}>
                             Submit
@@ -68,7 +81,8 @@ class Landing extends Component {
 }
 
 const mapS2P = state => ({
-    name: state.user.name
+    name: state.user.name,
+    users: state.info.users
 })
 
 export default connect(

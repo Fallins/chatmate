@@ -7,6 +7,7 @@ import './App.less'
 import Nav from './components/Nav/Nav'
 import Landing from './components/Landing/Landing'
 import Chatroom from './components/Chatroom/Chatroom'
+import Loby from './components/Loby/Loby'
 
 class App extends Component {
     componentDidMount() {
@@ -21,6 +22,7 @@ class App extends Component {
                         <Nav />
 
                         <Route exact path="/" component={Landing} />
+                        <Route exact path="/loby" component={Loby} />
                         <Route exact path="/chat" component={Chatroom} />
                     </div>
                 </Router>
